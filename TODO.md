@@ -1,0 +1,13 @@
+- [ ] Structure de la base de données
+- [ ] API 
+- [ ] Gestion des recettes (Création, consultation, modifier, supprimer)
+- [ ] Catalogues de recettes (infos recettes temps de préparation/cuisson, nombre de portions de base, ingrédients (quantité + unité), étapes, notes personnelles)
+- [ ] Base d'ingrédients
+- [ ] Système de tag
+- [ ] Système de saison
+- [ ] Planning de repas
+- [ ] Génération de la liste de course
+- [ ] Système de génération aléatoire
+- [ ] Export liste de course (format texte)
+- [ ] Export recette vers app Note
+- [ ] Scaling des portions en fonction nb parts
