@@ -1,0 +1,22 @@
+services:
+  ## Backend
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: planneat-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend/:/var/www/html
+    command: php spark serve --host 0.0.0.0 --port 8080
+  ## FrontEnd
+  frontend:
+    image: node:22-alpine
+    container_name: planneat-frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
