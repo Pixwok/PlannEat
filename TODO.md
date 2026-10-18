@@ -1,13 +1,33 @@
 - [x] Structure de la base de données
-- [ ] API 
-- [ ] Gestion des recettes (Création, consultation, modifier, supprimer)
-- [ ] Catalogues de recettes (infos recettes temps de préparation/cuisson, nombre de portions de base, ingrédients (quantité + unité), étapes, notes personnelles)
-- [ ] Base d'ingrédients
-- [ ] Système de tag
-- [ ] Système de saison
-- [ ] Planning de repas
-- [ ] Génération de la liste de course
-- [ ] Système de génération aléatoire
-- [ ] Export liste de course (format texte)
-- [ ] Export recette vers app Note
+
+## Features
+- [ ] Catalogues de recettes
+    - [ ] Création, modification, suppression
+    - [ ] Gestion des quantités
+    - [ ] Gestion des métriques (g, kg, ml, c à soupe, unité, c à café)
+    - [ ] Gestion des étapes
+    - [ ] Recherche par nom
+    - [ ] Recherche par ingrédients
+- [ ] Gestion des ingrédients
+    - [ ] Création, modification, suppression
+    - [ ] Base d'ingrédient de base (Seeds à implémenter au lancement de l'app)
+- [ ] API
+    - [ ] Routes API
+    - [ ] Structurer API
+    - [ ] Controllers API
+- [ ] Gestion des tags
+    - [ ] Création, modification, suppression
+    - [ ] Ajout, supression d'un tag sur une recette
+- [ ] Saisonnalité
+    - [ ] Associer les ingrédients à des saisons
+    - [ ] Vue quoi manger en ce moment
+- [ ] Plannification manuel
+    - [ ] Ajouter une recettes pour un repas (glisser déposer)
+- [ ] Génération de la liste de courses
+    - [ ] Depuis le planning, générer la liste d'ingrédients consolidée (agréagation des ingrédients identique et calcul des quantités)
+- [ ] Export de la liste de course vers téléphone (format note (QR CODE => Créer la note))
 - [ ] Scaling des portions en fonction nb parts
+- [ ] Génération aléatoire des repas
+    - [ ] Définir les options de génération (nb plat, redondance des plats, saison, tags)
+    - [ ] Bouton regénerer
+    - [ ] Valdiation => création liste de course.
