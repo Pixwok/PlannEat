@@ -1,4 +1,4 @@
-- [ ] Structure de la base de données
+- [x] Structure de la base de données
 - [ ] API 
 - [ ] Gestion des recettes (Création, consultation, modifier, supprimer)
 - [ ] Catalogues de recettes (infos recettes temps de préparation/cuisson, nombre de portions de base, ingrédients (quantité + unité), étapes, notes personnelles)

@@ -1,23 +1,25 @@
 env
+.env
 .vscode
 vendor/
+*.db
 
 #-------------------------
 # Temporary Files
 #-------------------------
-writable/cache/*
+backend/writable/cache/*
 !writable/cache/index.html
 
-writable/logs/*
+backend/writable/logs/*
 !writable/logs/index.html
 
-writable/session/*
+backend/writable/session/*
 !writable/session/index.html
 
-writable/uploads/*
+backend/writable/uploads/*
 !writable/uploads/index.html
 
-writable/debugbar/*
+backend/writable/debugbar/*
 !writable/debugbar/.gitkeep
 
 php_errors.log
