@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use RuntimeException;
 
 class RecipeModel extends Model
 {
@@ -16,6 +17,14 @@ class RecipeModel extends Model
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
+    protected $validationRules = [
+        'name' => 'required|max_length[255]'
+    ];
+
+    protected $validationMessages = [
+        'name' => ['required' => 'Le nom de la recette est obligatoire.'],
+    ];
+
     /**
      * Liste les recettes
      * @param int $limit 
@@ -23,18 +32,28 @@ class RecipeModel extends Model
      * @param string $direction Par defaut ASC
      * @return array Liste des recettes 
      */
-    public function getRecipes($limit = null, $orderBy = 'id', $direction = 'ASC')
+    public function getRecipes(?int $limit = null, string $orderBy = 'id', string $direction = 'ASC'): array
     {
         return $this->orderBy($orderBy,$direction)
                     ->findAll($limit);
     }
 
     /**
+     * Récupère une recette par son ID
+     * @param int $îd
+     * @return array
+     */
+    public function getRecipeById(int $id): array
+    {
+        return $this->find($id);
+    }
+
+    /**
      * Récupère un recette
      * @param array $filter Filtre de recherche
-     * @return array 
+     * @return mixed 
      */
-    public function searchRecipes($filter)
+    public function searchRecipes(array $filter): array
     {
         return $this->where($filter)->findAll();
     }
@@ -44,9 +63,12 @@ class RecipeModel extends Model
      * @param array $data
      * @return int ID recette créée
      */
-    public function createRecipe($data)
+    public function createRecipe(array $data): int
     {
-        $this->insert($data);
+        $res = $this->insert($data);
+        if ($res === false) {
+            throw new RuntimeException("Echec de création de la recette.");
+        }
         return $this->insertID();
     }
 
@@ -54,18 +76,19 @@ class RecipeModel extends Model
      * Modification d'une recette
      * @param int $id ID de la recette
      * @param array $data
-     * 
      */
-    public function editRecipe($id, $data)
+    public function editRecipe(int $id, array $data): void
     {
-        $this->update($id, $data);
+        if (! $this->update($id, $data)) {
+            throw new RuntimeException("Echec de la modification de la recette {$id}.");
+        }
     }
 
     /**
      * Suppression d'une recette
      * @param int $id ID recette
      */
-    public function deleteRecipes($id)
+    public function deleteRecipes(int $id): void
     {
         $this->delete($id);
     }
