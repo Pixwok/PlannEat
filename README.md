@@ -39,3 +39,10 @@ PlannEat inverse la logique : **on planifie d'abord, on fait une fois de grosse 
 git clone https://github.com/Pixwok/PlannEat.git
 cd PlannEat
 ```
+Créer .env pour backend. Voici un exemple de .env minimal pour la backend CI4.
+```
+CI_ENVIRONMENT = development
+database.default.hostname = localhost
+database.default.database = planneat.db
+database.default.DBDriver = SQLite3
+```
