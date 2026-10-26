@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class RecipeStagesTable extends Migration
+class RecipeStepsTable extends Migration
 {
     public function up()
     {
@@ -14,12 +14,12 @@ class RecipeStagesTable extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'stage_description' => [
+            'step_description' => [
                 'type' => 'VARCHAR',
                 'contrain' => '255',
                 'null' => false,
             ],
-            'stage_number' => [
+            'step_number' => [
                 'type' => 'INTEGER',
                 'unsigned' => true,
             ],
@@ -30,12 +30,12 @@ class RecipeStagesTable extends Migration
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addUniqueKey(['stage_number', 'id_recipes']); //Couple unique entre stage_number et id_recipes
-        $this->forge->createTable('recipe_stages');
+        $this->forge->addUniqueKey(['step_number', 'id_recipes']); //Couple unique entre stage_number et id_recipes
+        $this->forge->createTable('recipe_steps');
     }
 
     public function down()
     {
-        $this->forge->dropTable('recipe_stages');
+        $this->forge->dropTable('recipe_steps');
     }
 }

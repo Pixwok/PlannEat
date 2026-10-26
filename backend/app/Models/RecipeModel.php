@@ -2,7 +2,6 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
-use RuntimeException;
 
 class RecipeModel extends Model
 {
