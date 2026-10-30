@@ -2,7 +2,7 @@
 
 ## Features
 - [ ] Catalogues de recettes
-    - [ ] Création, modification, suppression
+    - [x] Création, modification, suppression
     - [ ] Gestion des quantités
     - [ ] Gestion des métriques (g, kg, ml, c à soupe, unité, c à café)
     - [ ] Gestion des étapes

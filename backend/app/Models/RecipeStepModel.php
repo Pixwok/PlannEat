@@ -3,9 +3,9 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class TagModel extends Model
+class RecipeStepModel extends Model
 {
-    protected $table = 'tags';
+    protected $table = 'recipe_steps';
     protected $primaryKey = 'id';
 
     protected $allowedFields = ['step_description', 'step_number', 'id_recipes'];

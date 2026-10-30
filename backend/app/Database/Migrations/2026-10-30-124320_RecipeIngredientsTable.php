@@ -21,6 +21,11 @@ class RecipeIngredientsTable extends Migration
                 'type' => 'FLOAT',
                 'null' => false,
             ],
+            'unit' => [
+                'type' => 'ENUM',
+                'constraint' => ['g', 'kg', 'ml', 'unité', 'c à soupe', 'c à café'],
+                'default' => 'unité',
+            ],
         ]);
 
         //Clé primaire = le couple est PK
