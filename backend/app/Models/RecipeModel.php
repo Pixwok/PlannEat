@@ -31,8 +31,8 @@ class RecipeModel extends Model
     public function getIngredients(int $recipeId)
     {
         return $this->db->table('recipe_ingredients')
-            ->select('')
-            ->join('ingredients', 'ingredients.id=recipes_ingredients.id_ingredients')
+            ->select('ingredients.id, ingredients.name, recipe_ingredients.quantity, recipe_ingredients.unit')
+            ->join('ingredients', 'ingredients.id=recipe_ingredients.id_ingredients')
             ->where('id_recipes', $recipeId)
             ->get()->getResultArray();
     }
@@ -44,7 +44,7 @@ class RecipeModel extends Model
     public function getSteps(int $recipeId)
     {
         return $this->db->table('recipe_steps')
-            ->select('')
+            ->select('*')
             ->where('id_recipes', $recipeId)
             ->orderBy('step_number', 'ASC')
             ->get()->getResultArray();

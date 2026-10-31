@@ -57,7 +57,20 @@ class Recipes extends ResourceController
         if (!$recipe) {
             return $this->failNotFound('Recipe not found');
         }
-        return $this->respond($recipe);
+
+        // Récupération des ingrédients
+        $ingredients = $this->recipeModel->getIngredients($id);
+        // Récupération des étapes
+        $steps = $this->recipeModel->getSteps($id);
+
+        // Formatage JSON
+        $respond = [
+            'recipe' => $recipe,
+            'steps' => $steps,
+            'ingredients' => $ingredients
+        ];
+
+        return $this->respond($respond);
     }
 
     /**
