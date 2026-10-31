@@ -46,3 +46,24 @@ database.default.hostname = localhost
 database.default.database = planneat.db
 database.default.DBDriver = SQLite3
 ```
+
+## Structure frontend VueJS
+```
+src/
+├── assets/
+│   └── styles/          # CSS global et utilitaires
+├── components/         # Composants réutilisables
+│   ├── RecipeCard.vue  # Carte de recette (catalogue)
+│   ├── MealPlanner.vue # Planificateur de repas
+│   └── ShoppingList.vue # Liste de courses
+├── views/              # Les pages
+├── stores/             # Gestion d'état (Pinia)
+│   ├── recipes.js
+│   ├── planner.js
+│   └── shopping.js
+├── services/           # Appels API
+│   └── api.js
+├── router/
+│   └── index.js
+└── App.vue
+```

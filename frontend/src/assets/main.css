@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #10b981;      /* vert émeraude : boutons, accents */
+  --color-primary-dark: #059669; /* version survol des boutons */
+}
