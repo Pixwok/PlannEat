@@ -8,7 +8,7 @@ $routes->get('/', 'Home::index');
 
 $routes->get('/recipes', [RecipesController::class, 'test']);
 
-$routes->group('/api', ['namespace' => 'App\Controllers\API'], function($routes) {
+$routes->group('/api', ['filter' => 'cors','namespace' => 'App\Controllers\API'], function($routes) {
     $routes->resource('recipes');
     $routes->resource('ingredients');
 });
