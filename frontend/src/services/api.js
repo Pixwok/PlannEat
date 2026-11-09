@@ -13,12 +13,15 @@ async function requestAPI(path, options = {}) {
 
 // Fonction api autoriser
 export const api = {
+    getIngredients: () => requestAPI('/ingredients'),
     getRecipes: () => requestAPI(`/recipes`),
-    getRecipeById: () => requestAPI(`/recipes/${id}`),
+    getRecipeById: (id) => requestAPI(`/recipes/${id}`),
+    getTagForRecipe: () => requestAPI(),
+    getIngredientForRecipe: () => requestAPI(),
     createRecipe: (data) =>
-        request('/recipes', { method: 'POST', body: JSON.stringify(data) }),
+        requestAPI('/recipes', { method: 'POST', body: JSON.stringify(data) }),
     updateRecipe: (id, data) =>
-        request(`/recipes/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+        requestAPI(`/recipes/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     deleteRecipe: (id) =>
-        request(`/recipes/${id}`, { method: 'DELETE' }),
+        requestAPI(`/recipes/${id}`, { method: 'DELETE' }),
 };

@@ -41,8 +41,7 @@ class Recipes extends ResourceController
             $recipes = $this->recipeModel->like('name', $name);
         }
 
-        $recipes = $this->recipeModel->orderBy($orderBy, $direction)
-                              ->findAll($limit);
+        $recipes = $this->recipeModel->orderBy($orderBy, $direction)->findAll($limit);
 
         return $this->respond($recipes);
     }
@@ -104,7 +103,7 @@ class Recipes extends ResourceController
                 $this->stepModel->insert([
                     'id_recipes' => $recipeId,
                     'step_number' => $step['step_number'],
-                    'step_description' => $step['step_describe']
+                    'step_description' => $step['step_description']
                 ]);
             }
             // Ajout des ingrédients
@@ -168,7 +167,7 @@ class Recipes extends ResourceController
                     $this->stepModel->insert([
                         'id_recipes' => $id,
                         'step_number' => $step['step_number'],
-                        'step_description' => $step['step_describe']
+                        'step_description' => $step['step_description']
                     ]);
                 }
             }
