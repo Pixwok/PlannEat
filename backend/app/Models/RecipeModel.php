@@ -31,7 +31,7 @@ class RecipeModel extends Model
     public function getIngredients(int $recipeId)
     {
         return $this->db->table('recipe_ingredients')
-            ->select('ingredients.id, ingredients.name, recipe_ingredients.quantity, recipe_ingredients.unit')
+            ->select('ingredients.id AS id_ingredients, ingredients.name, recipe_ingredients.quantity, recipe_ingredients.unit')
             ->join('ingredients', 'ingredients.id=recipe_ingredients.id_ingredients')
             ->where('id_recipes', $recipeId)
             ->get()->getResultArray();
