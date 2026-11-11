@@ -76,9 +76,25 @@ function selectSuggestionIng(index, ingredient) {
   showSuggestions.value = false;
 }
 
-const submit = () => {
+// Vérification si ingrédients existe
+async function verifyIngExist(ing) {
+  if (ing.id_ingredients !== null) return
+
+  // Création ingrédient
+  const response = await api.createIngredients({name: ing.name});
+
+  ing.id_ingredients = response;
+  console.log(response);
+}
+
+const submit = async() => {
   if (!form.value.name.trim()) return
   // On renvoie { id: undefined } en création → le store saura qu'il faut un POST
+  //Vérfication si ingrédient existe
+  for (const ing of form.value.ingredients) {
+    await verifyIngExist(ing)
+  }
+
   const payload = {
     name: form.value.name,
     time: form.value.time,

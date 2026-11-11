@@ -16,8 +16,8 @@ export const api = {
     getIngredients: () => requestAPI('/ingredients'),
     getRecipes: () => requestAPI(`/recipes`),
     getRecipeById: (id) => requestAPI(`/recipes/${id}`),
-    getTagForRecipe: () => requestAPI(),
-    getIngredientForRecipe: () => requestAPI(),
+    createIngredients: (data) =>
+        requestAPI('/ingredients', {method: 'POST', body: JSON.stringify(data)}),
     createRecipe: (data) =>
         requestAPI('/recipes', { method: 'POST', body: JSON.stringify(data) }),
     updateRecipe: (id, data) =>

@@ -64,7 +64,7 @@ class Ingredients extends ResourceController
 
         try {
             $this->model->insert($data);
-            return $this->respondCreated($data);
+            return $this->respondCreated($this->model->insertID());
         } catch (\Exception $e) {
             return $this->failServerError('Database error: ' . $e->getMessage());
         }
