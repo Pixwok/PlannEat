@@ -8,16 +8,20 @@ const emit = defineEmits(['close', 'save']);
 // Unités disponible pour ingrédients
 const UNITS = ['g', 'kg', 'ml', 'unité', 'c à soupe', 'c à café'];
 const ingredients = ref([]);
+const tags = ref([]);
 
 // Charger les ingrédients pour les menus déroulants
 onMounted(async () => {
-  const response = await api.getIngredients();
-  ingredients.value = response;
+  const respIng = await api.getIngredients();
+  ingredients.value = respIng;
+  const respTags = await api.getTags();
+  tags.value = respTags;
 })
 
 const recipeInfo = props.recipe?.recipe ?? {};
 const recipeIng = props.recipe?.ingredients ?? [];
 const recipeSteps = props.recipe?.steps ?? [];
+const recipeTags = props.recipe?.tags ?? [];
 
 // Formulaire
 const form = ref({
@@ -26,7 +30,20 @@ const form = ref({
     note: recipeInfo.note ?? '',
     ingredients: recipeIng ?? [],
     steps: recipeSteps ?? [],
+    tags: recipeTags ?? [],
 });
+
+function addTag() {
+  form.value.tags.push({
+    uidVue : Date.now(),
+    id_tags: null,
+    name: '',
+  });
+}
+
+function removeTag(index) {
+  form.value.tags.splice(index, 1);
+}
 
 function addIngredient() {
   form.value.ingredients.push({
@@ -108,6 +125,9 @@ const submit = async() => {
       step_number: i + 1,
       step_description: step.step_description,
     })),
+    tags: form.value.tags.map((tag, i) => ({
+      id_tags: tag.id_tags
+    }))
   }
   emit('save', {...payload, id: recipeInfo.id});
 }
@@ -144,6 +164,20 @@ const submit = async() => {
           <input v-model="form.note" placeholder="Description, note perso, indication,..."
                  class="w-full rounded-lg border border-slate-200 px-3 py-2 outline-none" />
         </div>
+      </div>
+
+      <!--Gestion des tags-->
+      <div class="mb-3">
+        <label class="mb-1 block text-sm font-semibold">Tags</label>
+        <div v-for="(tag, index) in form.tags" :key="tag.uidVue" class="mb-2 flex gap-2">
+          <select v-model="tag.id_tags" class="border border-gray-300 rounded-lg px-3 py-2 flex-1">
+            <option v-for="t in tags" :key="t.id" :value="t.id">{{ t.name }}</option>
+          </select>
+          <button type="button" @click="removeTag(index)"
+                  class="px-2 text-slate-400 hover:text-red-500">✕</button>
+        </div>
+        <button type="button" @click="addTag"
+                class="text-sm font-semibold text-primary hover:text-primary-dark">+ Ajouter un tag</button>
       </div>
 
       <!--Gestion des ingrédients-->

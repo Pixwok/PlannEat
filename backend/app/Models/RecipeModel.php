@@ -25,6 +25,17 @@ class RecipeModel extends Model
     ];
 
     /**
+     * Récupérer les recettes avec leurs tags
+     */
+    public function getRecipesWithTags()
+    {
+        return $this->select('recipes.*, recipe_tags.id_tags, tags.name AS tags')
+            ->join('recipe_tags', 'recipe_tags.id_recipes=recipes.id', 'left')
+            ->join('tags', 'tags.id=recipe_tags.id_tags', 'left')
+            ->findAll();
+    }
+
+    /**
      * Récupération des ingrédients de la recette
      * @param int $recipeId
      */
@@ -47,6 +58,19 @@ class RecipeModel extends Model
             ->select('*')
             ->where('id_recipes', $recipeId)
             ->orderBy('step_number', 'ASC')
+            ->get()->getResultArray();
+    }
+
+    /**
+     * Récupère les tags de la recette
+     * @param int $recipeId
+     */
+    public function getTags(int $recipeId)
+    {
+        return $this->db->table('recipe_tags')
+            ->select('tags.id AS id_tags, tags.name')
+            ->join('tags', 'tags.id=recipe_tags.id_tags')
+            ->where('id_recipes', $recipeId)
             ->get()->getResultArray();
     }
 }

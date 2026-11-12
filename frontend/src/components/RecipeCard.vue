@@ -14,8 +14,8 @@ const emit = defineEmits(['open', 'edit', 'delete'])
     </div>
 
     <div class="p-3.5">
-      <span class="mb-1 inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">
-        {{ recipe.difficulty ?? 'Facile' }} <!--Remplacer par les tags-->
+      <span v-for="tag in recipe.tags" class="mb-1 inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">
+        {{ tag.name}} <!--Remplacer par les tags-->
       </span>
       <h3 class="font-semibold">{{ recipe.name }}</h3>
       <p class="mt-1 flex gap-3 text-xs text-slate-500">

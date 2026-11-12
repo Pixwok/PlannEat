@@ -4,6 +4,7 @@ namespace App\Controllers\API;
 use App\Models\RecipeIngredientModel;
 use App\Models\RecipeModel;
 use App\Models\RecipeStepModel;
+use App\Models\RecipeTagModel;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -16,12 +17,14 @@ class Recipes extends ResourceController
     protected $recipeModel;
     protected $stepModel;
     protected $ingredientModel;
+    protected $tagModel;
 
     public function __construct()
     {
         $this->recipeModel = new RecipeModel();
         $this->stepModel = new RecipeStepModel();
         $this->ingredientModel = new RecipeIngredientModel();
+        $this->tagModel = new RecipeTagModel();
     }
 
     /**
@@ -31,6 +34,8 @@ class Recipes extends ResourceController
      */
     public function index()
     {
+        $recipes = [];
+
         $limit = $this->request->getGet('limit');
         $orderBy = $this->request->getGet('order_by') ?? 'id';
         $direction = $this->request->getGet('direction') ?? 'ASC';
@@ -38,12 +43,20 @@ class Recipes extends ResourceController
 
 
         if (!empty($name)) {
-            $recipes = $this->recipeModel->like('name', $name);
+            $rawRecipes = $this->recipeModel->like('name', $name);
         }
 
-        $recipes = $this->recipeModel->orderBy($orderBy, $direction)->findAll($limit);
+        $rawRecipes = $this->recipeModel->orderBy($orderBy, $direction)->findAll($limit);
+
+        foreach ($rawRecipes as $recipe) {
+            $tags = $this->recipeModel->getTags($recipe['id']);
+            $recipe['tags'] = $tags;
+
+            array_push($recipes, $recipe);
+        }
 
         return $this->respond($recipes);
+        
     }
 
     /**
@@ -61,12 +74,15 @@ class Recipes extends ResourceController
         $ingredients = $this->recipeModel->getIngredients($id);
         // Récupération des étapes
         $steps = $this->recipeModel->getSteps($id);
+        // Récupération des tags
+        $tags = $this->recipeModel->getTags($id);
 
         // Formatage JSON
         $respond = [
             'recipe' => $recipe,
             'steps' => $steps,
-            'ingredients' => $ingredients
+            'ingredients' => $ingredients,
+            'tags' => $tags,
         ];
 
         return $this->respond($respond);
@@ -113,6 +129,13 @@ class Recipes extends ResourceController
                     'id_ingredients' => $ingredient['id_ingredients'],
                     'quantity' => $ingredient['quantity'],
                     'unit' => $ingredient['unit']
+                ]);
+            }
+            // Ajout des tags
+            foreach ($data['tags'] as $tag) {
+                $this->tagModel->insert([
+                    'id_recipes' => $recipeId,
+                    'id_tags' => $tag['id_tags']
                 ]);
             }
 
@@ -185,6 +208,18 @@ class Recipes extends ResourceController
                 }
             }
 
+            // Mise à jour des tags
+            if (isset($data['tags'])) {
+                $this->tagModel->where('id_recipes', $id)->delete();
+                // Ajout des tags
+                foreach ($data['tags'] as $tag) {
+                    $this->tagModel->insert([
+                        'id_recipes' => $id,
+                        'id_tags' => $tag['id_tags']
+                    ]);
+                }
+            }
+
             $this->recipeModel->db->transComplete();
 
             if ($this->recipeModel->db->transStatus() === false) {
@@ -210,6 +245,7 @@ class Recipes extends ResourceController
 
         $this->stepModel->where('id_recipes', $id)->delete();
         $this->ingredientModel->where('id_recipes', $id)->delete();
+        $this->tagModel->where('id_recipes', $id)->delete();
         $this->recipeModel->delete($id);
         return $this->respondDeleted($recipe);
     }
