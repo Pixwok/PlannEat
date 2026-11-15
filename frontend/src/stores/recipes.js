@@ -1,11 +1,18 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { api } from "../services/api";
+
+export const DAYS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+export const SLOTS = ['midi', 'soir'];
 
 export const useRecipeStore = defineStore('recipe', () => {
     const recipes = ref([]);
     const recipeDetail = ref(null);
     const loading = ref(false);
+
+    const planner = ref(
+        Object.fromEntries(DAYS.map(day => [day, { midi: null, soir: null }]))
+    );
 
     // Récupère les ingrédients utilisable
     async function fetchIngredients(force = false) {
@@ -52,9 +59,41 @@ export const useRecipeStore = defineStore('recipe', () => {
         recipes.value = recipes.value.filter(r => r.id !== id)
     }
 
+    // Gestion du planning
+    function addMeal(day, slot, recipeId) {
+        planner.value[day][slot] = recipeId;
+    }
+
+    function removeMeal(day, slot) {
+        planner.value[day][slot] = null;
+    }
+
+    function clearPlanner() {
+        DAYS.forEach(day => SLOTS.forEach(slot => {
+            planner.value[day][slot] = null
+        }));
+    }
+
+    function generateMeals(numberMeal) {
+        // Créneau libre
+        const emptySlot = [];
+        DAYS.forEach(day => SLOTS.forEach(slot => {
+            if (!planner.value[day][slot]) emptySlot.push([day, slot])
+        }));
+        //Tirage au sort
+        for (let i = 0; i < numberMeal && emptySlot.length > 0; i++) {
+            const index = Math.floor(Math.random() * emptySlot.length);
+            const [day, slot] = emptySlot.splice(index, 1)[0];
+            const recipe = recipes.value[Math.floor(Math.random() * recipes.value.length)];
+            planner.value[day][slot] = recipe.id;
+        }
+    }
+
+
     return {
-        recipes, recipeDetail,
+        recipes, recipeDetail, planner,
         fetchIngredients,
-        fetchRecipes, fetchRecipeById, saveRecipe, removeRecipe
+        fetchRecipes, fetchRecipeById, saveRecipe, removeRecipe,
+        addMeal, removeMeal, clearPlanner, generateMeals
     };
 });
