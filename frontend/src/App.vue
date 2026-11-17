@@ -22,6 +22,10 @@ if (store.recipes.length === 0) store.fetchRecipes()
                                 [&.router-link-active]:bg-emerald-100 [&.router-link-active]:text-emerald-700">
         📅 Planification
       </RouterLink>
+      <RouterLink to="/shopping" class="rounded-lg px-3 py-2.5 font-medium text-slate-500 hover:bg-slate-100
+                                [&.router-link-active]:bg-emerald-100 [&.router-link-active]:text-emerald-700">
+        🛒 Courses
+      </RouterLink>
       <RouterLink to="/tags" class="rounded-lg px-3 py-2.5 font-medium text-slate-500 hover:bg-slate-100
                                 [&.router-link-active]:bg-emerald-100 [&.router-link-active]:text-emerald-700">
         ⚙️ Gestion des tags
@@ -43,6 +47,10 @@ if (store.recipes.length === 0) store.fetchRecipes()
       <RouterLink to="/planner" class="flex flex-col items-center gap-0.5 rounded-lg px-3 py-1.5 text-xs
                          text-slate-500 [&.router-link-active]:text-emerald-700">
         <span class="text-xl">📅</span>Planification
+      </RouterLink>
+      <RouterLink to="/shopping" class="flex flex-col items-center gap-0.5 rounded-lg px-3 py-1.5 text-xs
+                         text-slate-500 [&.router-link-active]:text-emerald-700">
+        <span class="text-xl">🛒</span>Courses
       </RouterLink>
       <RouterLink to="/tags" class="flex flex-col items-center gap-0.5 rounded-lg px-3 py-1.5 text-xs
                          text-slate-500 [&.router-link-active]:text-emerald-700">

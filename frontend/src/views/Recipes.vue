@@ -23,13 +23,14 @@ const editingRecipe = ref(null);
 const showModalCreation = () => (editingRecipe.value = {});
 async function showModalEdition(id) {
   await store.fetchRecipeById(id); 
-  editingRecipe.value = store.recipeDetail;
-  store.recipeDetail = null;
+  editingRecipe.value = store.recipeDetails[id];
 }
 
 // Detail recette
-function openRecipe(id) {
-  store.fetchRecipeById(id);
+const openingRecipe = ref(null);
+async function openRecipe(id) {
+  await store.fetchRecipeById(id);
+  openingRecipe.value = store.recipeDetails[id];
 }
 
 </script>
@@ -76,8 +77,8 @@ function openRecipe(id) {
   />
 
   <RecipeDetail
-    v-if="store.recipeDetail"
-    :recipe="store.recipeDetail"
-    @close="store.recipeDetail = null"
+    v-if="openingRecipe"
+    :recipe="openingRecipe"
+    @close="openingRecipe = null"
   />
 </template>

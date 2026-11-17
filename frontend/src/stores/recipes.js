@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { api } from "../services/api";
 
 export const DAYS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
@@ -7,8 +7,9 @@ export const SLOTS = ['midi', 'soir'];
 
 export const useRecipeStore = defineStore('recipe', () => {
     const recipes = ref([]);
-    const recipeDetail = ref(null);
     const loading = ref(false);
+    const recipeDetails = ref({});
+    const detailsLoading = ref(false);
 
     const planner = ref(
         Object.fromEntries(DAYS.map(day => [day, { midi: null, soir: null }]))
@@ -33,12 +34,10 @@ export const useRecipeStore = defineStore('recipe', () => {
 
     // Détail d'une recette
     async function fetchRecipeById(id) {
-        loading.value = true;
-        try {
-            recipeDetail.value = await api.getRecipeById(id);
-        } finally {
-            loading.value = true;
-        }
+        if (recipeDetails.value[id]) return recipeDetails.value[id] // déjà en cache
+        const detail = await api.getRecipeById(id)
+        recipeDetails.value[id] = detail 
+        return detail
     }
 
     // Sauvegarder une recette (modification ou création)
@@ -89,11 +88,54 @@ export const useRecipeStore = defineStore('recipe', () => {
         }
     }
 
+    // Récupération des ID de recette dans planning
+    const plannedRecipeIds = computed(() => {
+        const ids = new Set() // Set = pas de doublon si une recette est planifiée 3 fois
+        DAYS.forEach(day => SLOTS.forEach(slot => {
+        const id = planner.value[day][slot]
+        if (id) ids.add(id)
+        }))
+        return [...ids]
+    })
+
+    async function fetchMissingDetails(ids) {
+        const missing = [...new Set(ids)].filter(id => id && !recipeDetails.value[id])
+        if (missing.length === 0) return // test cache
+        detailsLoading.value = true
+        try {
+            await Promise.all(missing.map(id => fetchRecipeById(id)))
+        } finally {
+            detailsLoading.value = false
+        }
+    }
+
+    function fetchPlannerDetails() {
+        return fetchMissingDetails(plannedRecipeIds.value)
+    }
+
+    // Gestion dynamique de la liste de course
+    const shoppingList = computed(() => {
+        const map = new Map();
+        DAYS.forEach(day => SLOTS.forEach(slot => {
+            const id = planner.value[day][slot]
+            const detail = id ? recipeDetails.value[id] : null
+            if (!detail) return
+            const ingredients = detail.ingredients ?? []
+            ingredients.forEach(ing => {
+                const key = `${ing.name}`
+                if (!map.has(key)) map.set(key, { name: ing.name, quantity: [], unit: ing.unit })
+                map.get(key).quantity.push(ing.quantity) // cumule des ingrédients
+            })
+        }))
+        return [...map.values()]
+    });
 
     return {
-        recipes, recipeDetail, planner,
+        recipes, recipeDetails, planner,
         fetchIngredients,
         fetchRecipes, fetchRecipeById, saveRecipe, removeRecipe,
-        addMeal, removeMeal, clearPlanner, generateMeals
+        addMeal, removeMeal, clearPlanner, generateMeals,
+        fetchPlannerDetails,
+        shoppingList
     };
 });
